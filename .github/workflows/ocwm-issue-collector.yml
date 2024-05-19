@@ -25,7 +25,7 @@ jobs:
         PLACEHOLDER: '<!-- | [TOPIC] [IssuePRDiscussion] | [owner] | -->'
         OWNER: 'AuroraBenzyl'
         REPO: 'testing-community'
-        REPO_NAMES: 'testing-communtiy'
+        REPO_NAMES: 'testing-community'
         AGENDA_LABEL: 'agenda'
         OCWM_LABEL: 'Working Meeting'
         MY_TOKEN: ${{ secrets.AUTH_TOKEN }}
