@@ -131,11 +131,14 @@ jobs:
                     await mygithub.graphql(`
                       mutation {
                         removeLabelsFromLabelable(input: {labelIds: [label.id], labelableId: discussions[i].node.node_id}) {
-                          clientMutationId
+                          1234
                         }
                       }
                     `);
                   }
+
+                console.log("It is working : )")
+                  
                 }
             }
             catch (err) {
