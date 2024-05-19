@@ -3,7 +3,7 @@ name: Search for issues and PR labeled 'agenda' and add them to the agenda
 on:
   schedule:
     - cron: '0 0 * * 0'  # Runs every Sunday at midnight
-
+  workflow_dispatch:
   repository_dispatch:
     types: add-issues-ocwm
 
