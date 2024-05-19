@@ -149,7 +149,7 @@ jobs:
       id: get-label-id
       uses: actions/github-script@v7
       env:
-        OWNER: ${{ vars.ORGANIZATION }}
+        OWNER: 'AuroraBenzyl'
         REPO: 'testing-community'
         LABEL_NAME: 'agenda'
         MY_TOKEN: ${{ secrets.AUTH_TOKEN }}
@@ -161,6 +161,7 @@ jobs:
           });
 
           try {
+            console.log('GET /repos/${process.env.OWNER}/${process.env.REPO}/labels/${process.env.LABEL_NAME}')
             const { data: label } = await mygithub.request('GET /repos/${process.env.OWNER}/${process.env.REPO}/labels/${process.env.LABEL_NAME}');
             console.log(label);
           }
