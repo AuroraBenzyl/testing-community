@@ -123,6 +123,10 @@ jobs:
                     state: 'open',
                   })
 
+                  const { data: label } = await mygithub.request('GET /repos/${process.env.OWNER}/${process.env.REPO}/labels/${process.env.LABEL_NAME}');
+
+                  console.log("Label ID", label);
+
                   for (let i = 0; i < discussions.length; i++) {
                     await mygithub.graphql(`
                       mutation {
