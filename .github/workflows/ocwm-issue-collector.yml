@@ -123,7 +123,7 @@ jobs:
                     state: 'open',
                   })
 
-                  const { data: label } = await mygithub.request('GET /repos/${process.env.OWNER}/${process.env.REPO}/labels/${process.env.LABEL_NAME}');
+                  const { data: label } = await mygithub.request(`GET /repos/${process.env.OWNER}/${process.env.REPO}/labels/${process.env.LABEL_NAME}`);
 
                   console.log("Label ID", label);
 
@@ -161,8 +161,8 @@ jobs:
           });
 
           try {
-            console.log('GET /repos/${process.env.OWNER}/${process.env.REPO}/labels/${process.env.LABEL_NAME}')
-            const { data: label } = await mygithub.request('GET /repos/${process.env.OWNER}/${process.env.REPO}/labels/${process.env.LABEL_NAME}');
+            console.log(`GET /repos/${process.env.OWNER}/${process.env.REPO}/labels/${process.env.LABEL_NAME}`)
+            const { data: label } = await mygithub.request(`GET /repos/${process.env.OWNER}/${process.env.REPO}/labels/${process.env.LABEL_NAME}`);
             console.log(label);
           }
           catch(error){
