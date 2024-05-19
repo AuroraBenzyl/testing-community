@@ -62,6 +62,7 @@ jobs:
                 edges {
                   node {
                     ... on Discussion {
+                      node_id
                       title
                       body
                       resourcePath
