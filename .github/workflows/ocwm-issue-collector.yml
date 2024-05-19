@@ -62,7 +62,7 @@ jobs:
                 edges {
                   node {
                     ... on Discussion {
-                      node_id
+                      id
                       title
                       body
                       resourcePath
@@ -131,7 +131,7 @@ jobs:
                   for (let i = 0; i < discussions.length; i++) {
                     await mygithub.graphql(`
                       mutation {
-                        removeLabelsFromLabelable(input: {labelIds: ["${label.id}"], labelableId: "${discussions[i].node.node_id}"}) {
+                        removeLabelsFromLabelable(input: {labelIds: ["${label.id}"], labelableId: "${discussions[i].node.id}"}) {
                           1234
                         }
                       }
