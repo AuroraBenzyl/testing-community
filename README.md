@@ -28,6 +28,7 @@
     </a> 
 </p>
 
+
 # JSON Schema Community
 
 Welcome to the JSON Schema community! You've arrived at the perfect place to begin your journey as a contributor. Whether it's assisting with documentation, writing a blog post, enhancing the website, delivering presentations, or any other form of contribution, there's plenty of opportunities to get involved in the project. We are a friendly, collaborative group and look forward to working together.
