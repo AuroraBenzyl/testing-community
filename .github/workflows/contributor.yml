@@ -49,8 +49,8 @@ jobs:
           env:
             GITHUB_APP_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
           run: |
-            git config user.name "the-json-schema-bot[bot]"
-            git config user.email "the-json-schema-bot[bot]@users.noreply.github.com"
+            git config user.name "ashtom"
+            git config user.email "ashtom@github.com"
             git add community.json
             git diff --quiet && git diff --staged --quiet || (git commit -m "chore(community): update community.json" && git push "https://x-access-token:${GITHUB_APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF#refs/heads/})
 
