@@ -65,9 +65,9 @@ jobs:
               uses: actions/create-github-app-token@v1
               id: get_workflow_token
               with:
-                app-id: ${{ vars.APP_ID }}
-                private-key: ${{ secrets.PRIVATE_KEY }}
-      
+                app-id: ${{ vars.APPLICATION_ID }}
+                private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
             # fetch project data and store it in a file
             - name: Fetch project data
               env:
