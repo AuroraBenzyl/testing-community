@@ -1,0 +1,107 @@
+name: Fetch and Commit Project Data
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Runs every Sunday at midnight
+  workflow_dispatch:
+
+jobs:
+  fetch-and-commit-project-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          
+      - name: Get Token
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v3
+        with:
+          application_id: ${{ vars.APPLICATION_ID }}
+          application_private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Fetch project data
+        env:
+          GH_TOKEN:  ${{ steps.get_workflow_token.outputs.token }} # GitHub App token stored in secrets
+          PROJECT_ID: 'PVT_kwDOCaXxy84Ajqrg' # Project ID
+        run: |
+          gh api graphql -f query='
+          query($PROJECT_ID : ID!) {
+            node(id: $PROJECT_ID) {
+              ... on ProjectV2 {
+                items(first: 20) {
+                  nodes {
+                    id
+                    fieldValues(first: 8) {
+                      nodes {
+                        ... on ProjectV2ItemFieldTextValue {
+                          text
+                          field {
+                            ... on ProjectV2FieldCommon {
+                              name
+                            }
+                          }
+                        }
+                        ... on ProjectV2ItemFieldDateValue {
+                          date
+                          field {
+                            ... on ProjectV2FieldCommon {
+                              name
+                            }
+                          }
+                        }
+                        ... on ProjectV2ItemFieldSingleSelectValue {
+                          name
+                          field {
+                            ... on ProjectV2FieldCommon {
+                              name
+                            }
+                          }
+                        }
+                      }
+                    }
+                    content {
+                      ... on DraftIssue {
+                        title
+                        body
+                      }
+                      ... on Issue {
+                        title
+                        assignees(first: 10) {
+                          nodes {
+                            login
+                          }
+                        }
+                      }
+                      ... on PullRequest {
+                        title
+                        assignees(first: 10) {
+                          nodes {
+                            login
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }' -f PROJECT_ID=$PROJECT_ID | jq '.data.node.items.nodes' > project_data.json
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Commit changes
+        run: |
+          git add project_data.json
+          git commit -m "Update project data"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }} # Use the GitHub App token for committing
