@@ -1,39 +1,49 @@
 name: Sync Contributors and Roadmap
 on:
   workflow_dispatch:
-jobs:
-    sync-contributors-data:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Repository  
-              uses: actions/checkout@v4
 
-            - name: Fetch Contributors data
-              uses: actions/github-script@v7
-              with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
-                script: |
-                  const fs = require('fs');
-                  
-                  let data = await github.paginate(github.rest.repos.listContributors, {
-                    owner: "json-schema-org",
-                    repo: "website",
-                    per_page: 100,
-                    headers: {
-                      "X-GitHub-Api-Version": "2022-11-28",
-                    },
-                  });
-                  
-                  // Filter the data to get only the required fields
-                  data = data.map(({ login, id, avatar_url, html_url, contributions }) => 
-                    ({ login, id, avatar_url, html_url, contributions }));
-                  
-                  // Store the data in a file
-                  fs.writeFileSync('community.json', JSON.stringify(data, null, 2));
-                 
-            - name: Commit changes
-              run: |
-                git config user.name github-actions
-                git config user.email github-actions@github.com
-                git add community.json
-                git diff --quiet && git diff --staged --quiet || (git commit -m "Update community.json" && git push)
+jobs:
+  sync-contributors-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository  
+        uses: actions/checkout@v4
+
+      - name: Get Token 
+        uses: actions/create-github-app-token@v1
+        id: get_workflow_token
+        with:
+          app-id: ${{ vars.APPLICATION_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Fetch Contributors data
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.get_workflow_token.outputs.token }}
+          script: |
+            const fs = require('fs');
+            
+            let data = await github.paginate(github.rest.repos.listContributors, {
+              owner: "json-schema-org",
+              repo: "website",
+              per_page: 100,
+              headers: {
+                "X-GitHub-Api-Version": "2022-11-28",
+              },
+            });
+            
+            // Filter the data to get only the required fields
+            data = data.map(({ login, id, avatar_url, html_url, contributions }) => 
+              ({ login, id, avatar_url, html_url, contributions }));
+            
+            // Store the data in a file
+            fs.writeFileSync('community.json', JSON.stringify(data, null, 2));
+           
+      - name: Commit changes
+        env:
+          APP_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
+        run: |
+          git config user.name "aurorabenzyl-bot[bot]"
+          git config user.email "aurorabenzyl-bot[bot]@users.noreply.github.com"
+          git add community.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update community.json" && git push "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF#refs/heads/})
