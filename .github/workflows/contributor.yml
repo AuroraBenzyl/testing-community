@@ -15,6 +15,7 @@ jobs:
                 app-id: ${{ vars.APPLICATION_ID }}
                 private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
+            # Fetch Contributors data using github script with pagination
             - name: Fetch Contributors data
               uses: actions/github-script@v7
               env:
@@ -35,19 +36,19 @@ jobs:
                   
                   console.log(JSON.stringify(data, null, 2));
                   
-                  // Filter the data to get only the required fields
-                  data = data.map(({ login, id, avatar_url, html_url, contributions }) => 
-                    ({ login, id, avatar_url, html_url, contributions }));
+                  // Filter the data to get only the required fields [login, id, avatar_url, html_url, contributions]
+                  data = data.map(({ login, id, avatar_url, html_url, contributions }) => ({ login, id, avatar_url, html_url, contributions }));
                   
                   // Store the data in a file
                   fs.writeFileSync('community.json', JSON.stringify(data, null, 2));
                  
+            # Commit the updated contributors data
             - name: Commit changes
               env:
-                GH_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
+                GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
               run: |
-                git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                git config --global user.email "github-actions[bot]@users.noreply.github.com"
                 git config --global user.name "github-actions[bot]"
                 git add community.json
-                git commit --amend -m "Update community.json"
-                git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git -f
+                git commit -m "Update community.json"
+                git push
