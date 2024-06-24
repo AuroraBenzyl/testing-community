@@ -49,8 +49,8 @@ jobs:
           env:
             GITHUB_APP_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
           run: |
-            git config user.name "ashtom"
-            git config user.email "ashtom@github.com"
+            git config user.name "the-json-schema-bot[bot]"
+            git config user.email "the-json-schema-bot[bot]@users.noreply.github.com"
             git add community.json
             git diff --quiet && git diff --staged --quiet || (git commit -m "chore(community): update community.json" && git push "https://x-access-token:${GITHUB_APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF#refs/heads/})
 
@@ -67,7 +67,7 @@ jobs:
               with:
                 app-id: ${{ vars.APPLICATION_ID }}
                 private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
+      
             # fetch project data and store it in a file
             - name: Fetch project data
               env:
@@ -136,15 +136,17 @@ jobs:
                     }
                   }
                 }' -f PROJECT_ID=$PROJECT_ID | jq '.data.node.items.nodes' > project_data.json
-      
           
             # commit updated project data
             - name: Commit changes
               env:
                 GITHUB_APP_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
               run: |
-                git config user.name "gaearon"
-                git config user.email "dan.abramov@gmail.com"
+                git config user.name "the-json-schema-bot[bot]"
+                git config user.email "the-json-schema-bot[bot]@users.noreply.github.com"
                 git add project_data.json
                 git diff --quiet && git diff --staged --quiet || (git commit -m "chore(project_data): update project_data.json" && git push "https://x-access-token:${GITHUB_APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF#refs/heads/})
             
+            
+
+  
