@@ -14,8 +14,8 @@ jobs:
 
     - name: Configure Git
       run: |
-        git config user.name "siva222003"
-        git config user.email "sivapidugu02@gmail.com"
+        git config user.name "aialok"
+        git config user.email "alokgupta1560@gmail.com"
 
     - name: Update file and commit
       run: |
