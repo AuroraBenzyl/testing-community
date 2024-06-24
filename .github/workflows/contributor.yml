@@ -44,37 +44,36 @@ jobs:
             
             // Store the data in a file
             fs.writeFileSync('community.json', JSON.stringify(data, null, 2));
-          
+
       - name: Commit changes
         env:
           GITHUB_APP_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
         run: |
           git config user.name "the-json-schema-bot[bot]"
           git config user.email "the-json-schema-bot[bot]@users.noreply.github.com"
-          git pull --rebase
           git add community.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(community): update community.json")
-          git push "https://x-access-token:${GITHUB_APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:master
+          git stash
+          git pull --rebase
+          git stash pop
+          git diff --quiet || (git commit -m "chore(community): update community.json" && git push "https://x-access-token:${GITHUB_APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF#refs/heads/})
 
   sync-roadmap-data:
-    needs: sync-contributors-data
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-               
+
       - name: Get Token 
         uses: actions/create-github-app-token@v1
         id: get_workflow_token
         with:
           app-id: ${{ vars.APPLICATION_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
-    
-      # fetch project data and store it in a file
+  
       - name: Fetch project data
         env:
-          GH_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
-          PROJECT_ID: ${{vars.PROJECT_ID}}
+          GH_TOKEN: ${{ steps.get_workflow_token.outputs.token }} # GitHub App token stored in secrets
+          PROJECT_ID: ${{ vars.PROJECT_ID }} # Project ID
         run: |
           gh api graphql -f query='
           query($PROJECT_ID : ID!) {
@@ -138,15 +137,15 @@ jobs:
               }
             }
           }' -f PROJECT_ID=$PROJECT_ID | jq '.data.node.items.nodes' > project_data.json
-        
-      # commit updated project data
+      
       - name: Commit changes
         env:
           GITHUB_APP_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
         run: |
           git config user.name "the-json-schema-bot[bot]"
           git config user.email "the-json-schema-bot[bot]@users.noreply.github.com"
-          git pull --rebase
           git add project_data.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(project_data): update project_data.json")
-          git push "https://x-access-token:${GITHUB_APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:master
+          git stash
+          git pull --rebase
+          git stash pop
+          git diff --quiet || (git commit -m "chore(project_data): update project_data.json" && git push "https://x-access-token:${GITHUB_APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:${GITHUB_REF#refs/heads/})
