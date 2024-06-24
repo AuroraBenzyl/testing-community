@@ -1,0 +1,28 @@
+name: Commit to Other Repo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  commit-to-other-repo:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout target repository
+      uses: actions/checkout@v4
+      with:
+        repository:  'AuroraBenzyl/json-schema-bot'
+
+    - name: Configure Git
+      run: |
+        git config user.name "GitHub Action Bot"
+        git config user.email "action@github.com"
+
+    - name: Update file and commit
+      run: |
+        touch index.js
+        git add index.js
+        git commit -m "added touch.js"
+        git push
+
+    - name: Output result
+      run: echo "Committed changes to AuroraBenzyl/json-schema-bot"
