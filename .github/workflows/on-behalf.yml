@@ -14,7 +14,7 @@ jobs:
 
     - name: Configure Git
       run: |
-        git config user.name "github-actions[bot]"
+        git config user.name "siva222003"
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
     - name: Update file and commit
