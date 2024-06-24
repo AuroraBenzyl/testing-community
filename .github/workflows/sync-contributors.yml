@@ -39,8 +39,8 @@ jobs:
               });
               
               // Filter the data to get only the required fields
-              data = data.map(({ login, id, avatar_url, html_url, contributions }) => 
-                ({ login, id, avatar_url, html_url, contributions }));
+              data = data.map(({ login, id, avatar_url, html_url }) => 
+                ({ login, id, avatar_url, html_url }));
               
               // Store the data in a file
               fs.writeFileSync('community.json', JSON.stringify(data, null, 2));
