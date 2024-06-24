@@ -1,1 +1,37 @@
-
+[
+  {
+    "login": "aialok",
+    "id": 66772290,
+    "avatar_url": "https://avatars.githubusercontent.com/u/66772290?v=4",
+    "html_url": "https://github.com/aialok",
+    "contributions": 30
+  },
+  {
+    "login": "the-json-schema-bot[bot]",
+    "id": 171232837,
+    "avatar_url": "https://avatars.githubusercontent.com/in/909251?v=4",
+    "html_url": "https://github.com/apps/the-json-schema-bot",
+    "contributions": 7
+  },
+  {
+    "login": "aurorabenzyl-bot[bot]",
+    "id": 171235823,
+    "avatar_url": "https://avatars.githubusercontent.com/in/909278?v=4",
+    "html_url": "https://github.com/apps/aurorabenzyl-bot",
+    "contributions": 2
+  },
+  {
+    "login": "gaearon",
+    "id": 810438,
+    "avatar_url": "https://avatars.githubusercontent.com/u/810438?v=4",
+    "html_url": "https://github.com/gaearon",
+    "contributions": 2
+  },
+  {
+    "login": "ashtom",
+    "id": 70720,
+    "avatar_url": "https://avatars.githubusercontent.com/u/70720?v=4",
+    "html_url": "https://github.com/ashtom",
+    "contributions": 1
+  }
+]
