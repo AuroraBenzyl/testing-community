@@ -18,6 +18,8 @@ jobs:
         git config user.email "alokgupta1560@gmail.com"
 
     - name: Update file and commit
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       run: |
         touch index.js
         git add index.js
