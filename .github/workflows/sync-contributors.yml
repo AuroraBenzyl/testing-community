@@ -54,7 +54,7 @@ jobs:
         
           
         - name: Create Pull Request
-         # check if the file has changed
+          id: cpr
           uses: peter-evans/create-pull-request@v6
           with:
             token: ${{ steps.get_workflow_token.outputs.token }}
@@ -70,3 +70,18 @@ jobs:
             draft: false
             signoff: true
             add-paths: 'community.json'
+
+        - name: Auto Approve
+          if: steps.cpr.outputs.pull-request-operation == 'created'
+          run: gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
+          env:
+            GH_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
+
+          
+        - name: Auto Merge PR
+          if: steps.cpr.outputs.pull-request-operation == 'created'
+          uses:  peter-evans/enable-pull-request-automerge@v3
+          with:
+            pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+            merge-method: 'squash'
+            token: ${{ steps.get_workflow_token.outputs.token }}
