@@ -75,7 +75,7 @@ jobs:
           if: steps.cpr.outputs.pull-request-operation == 'created'
           run: gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
           env:
-            GH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
           
         - name: Auto Merge PR
